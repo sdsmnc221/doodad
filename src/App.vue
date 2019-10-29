@@ -2,10 +2,12 @@
 <template>
   <div class="app">
     <nav>
-      <router-link to="/">Home</router-link>|
-      <router-link to="/about">About</router-link>
+      <router-link to="/">hi-</router-link>
+      <router-link to="/hello-world">hello world-</router-link>
     </nav>
-    <div></div>
+    <main>
+      <router-view/>
+    </main>
   </div>
 </template>
 
@@ -24,11 +26,21 @@ body {
   overflow: hidden;
   position: relative;
   display: flex;
-  color: white;
 
   nav {
     background-color: black;
+    color: white;
     flex-basis: 40%;
+
+    a {
+      display: block;
+    }
+  }
+
+  main {
+    overflow: hidden;
+    color: black;
+    flex: 1;
   }
 }
 </style>

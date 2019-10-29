@@ -1,22 +1,13 @@
 
 <template>
   <div class="app">
-    <nav>Hello</nav>
+    <nav>
+      <router-link to="/">Home</router-link>|
+      <router-link to="/about">About</router-link>
+    </nav>
     <div></div>
   </div>
 </template>
-
-<script lang="ts">
-import Vue from "vue";
-
-export default Vue.extend({
-  data: function() {
-    return {
-      name: "Hello World!"
-    };
-  }
-});
-</script>
 
 <style lang="scss">
 @import "./styles";
@@ -33,6 +24,7 @@ body {
   overflow: hidden;
   position: relative;
   display: flex;
+  color: white;
 
   nav {
     background-color: black;

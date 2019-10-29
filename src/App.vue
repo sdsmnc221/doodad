@@ -1,46 +1,37 @@
 
 <template>
-  <div class="app">
-    <nav>
-      <router-link to="/">hi-</router-link>
-      <router-link to="/hello-world">hello world-</router-link>
-    </nav>
-    <main>
-      <router-view/>
-    </main>
-  </div>
+	<div class="app">
+		<nav>
+			<router-link to="/">hi-</router-link>
+			<router-link to="/hello-world">hello world-</router-link>
+		</nav>
+		<main>
+			<router-view />
+		</main>
+	</div>
 </template>
 
 <style lang="scss">
-@import "./styles";
+	@import './styles';
 
-body {
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-}
+	.app {
+		display: flex;
 
-.app {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  position: relative;
-  display: flex;
+		nav {
+			background-color: black;
+			color: white;
+			flex-basis: 40%;
 
-  nav {
-    background-color: black;
-    color: white;
-    flex-basis: 40%;
+			a {
+				display: block;
+			}
+		}
 
-    a {
-      display: block;
-    }
-  }
-
-  main {
-    overflow: hidden;
-    color: black;
-    flex: 1;
-  }
-}
+		main {
+			overflow: hidden;
+			color: black;
+			flex: 1;
+			padding: 64px;
+		}
+	}
 </style>

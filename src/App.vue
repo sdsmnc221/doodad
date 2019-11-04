@@ -6,16 +6,19 @@
       <router-link to="/hello-world">hello world-</router-link>
     </nav>
     <main>
-      <router-view/>
+				<router-view/>
     </main>
+		<LoadingOverlay />
   </div>
 </template>
 
 <script>
 import EventBus from './classes/EventBus';
+import LoadingOverlay from './components/LoadingOverlay';
 
 export default {
 	name: 'App',
+	components: { LoadingOverlay },
 	mounted() {
 		window.addEventListener('resize', () => EventBus.$emit('resize'));
 	}
@@ -40,10 +43,11 @@ export default {
 	}
 
 	main {
+		position: relative;
 		overflow: hidden;
-		color: black;
 		flex: 1;
-		padding: 64px;
+		color: black;
+			padding: 64px;
 	}
 }
 </style>

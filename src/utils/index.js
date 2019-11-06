@@ -46,7 +46,8 @@ const utils = {
 		const dx = x1 - x2;
 		const dy = y1 - y2;
 		return Math.sqrt(dx * dx + dy * dy);
-	}
+	},
+	tick: (cb, t) => setTimeout(() => cb(), t)
 };
 
 export default utils;

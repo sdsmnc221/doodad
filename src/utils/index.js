@@ -19,11 +19,15 @@ const utils = {
 			return n2;
 		}
 	},
+	randomHexColorCode() {
+		let n = (Math.random() * 0xfffff * 1000000).toString(16);
+		return '#' + n.slice(0, 6);
+	},
 	extractRGB: (color) =>
 		color
-			.split(',')
-			.map((c) => parseInt(c.match(/\d+/)))
-			.filter((c) => !isNaN(c)),
+		.split(',')
+		.map((c) => parseInt(c.match(/\d+/)))
+		.filter((c) => !isNaN(c)),
 	alpha: (color, opacity) => color.replace('o', opacity),
 	randomIntegerInRange: (min, max) =>
 		Math.floor(Math.random() * (max - min + 1)) + min,
@@ -38,7 +42,9 @@ const utils = {
 		return arr;
 	},
 	chunk: (arr, size) =>
-		Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+		Array.from({
+				length: Math.ceil(arr.length / size)
+			}, (v, i) =>
 			arr.slice(i * size, i * size + size)
 		),
 	radian: () => (Math.random() * 360 * Math.PI) / 180,

@@ -4,6 +4,7 @@
 		<nav>
 			<router-link to="/">hi-</router-link>
 			<router-link to="/hello-world">hello world-</router-link>
+			<router-link to="/popping">popping-</router-link>
 		</nav>
 		<main>
 			<router-view />

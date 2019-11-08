@@ -13,12 +13,21 @@ export default new Router({
 		},
 		{
 			path: '/hello-world',
-			name: 'about',
+			name: 'hello-world',
 			// route level code-splitting
 			// this generates a separate chunk (about.[hash].js) for this route
 			// which is lazy-loaded when the route is visited.
 			component: () =>
-				import(/* webpackChunkName: "about" */ './views/HelloWorld.vue')
+				import('./views/HelloWorld.vue')
+		},
+		{
+			path: '/popping',
+			name: 'popping',
+			// route level code-splitting
+			// this generates a separate chunk (about.[hash].js) for this route
+			// which is lazy-loaded when the route is visited.
+			component: () =>
+				import('./views/Popping.vue')
 		}
 	]
 });

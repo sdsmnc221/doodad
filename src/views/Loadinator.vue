@@ -11,18 +11,14 @@
 	import EventBus from '../classes/EventBus';
 	import utils from '../utils';
 
-	import Pop from '../assets/popping/pop.mp3';
-
 	const { tick } = utils;
 
 	export default {
-		name: 'Popping',
+		name: 'Loadinator',
 		data() {
 			return {
 				bounding: null,
-				play: true,
-				pop: new Audio(Pop),
-				popTerval: [],
+				play: true
 			};
 		},
 		computed: {},
@@ -30,14 +26,9 @@
 			EventBus.$on('resize', this.resize.bind(this));
 			EventBus.$on('toggle', this.toggle.bind(this));
 			EventBus.$on('refresh', this.refresh.bind(this));
-			EventBus.$on('nav', this.popout);
 		},
 		mounted() {
-			tick(() => {
-				this.size();
-				this.poppin();
-			}, 1000);
-			
+			tick(this.size, 1000);
 		},
 		methods: {
 			size() {
@@ -67,10 +58,8 @@
 
 					if (this.play) {
 						anime.set(cells, { animationPlayState: 'running' });
-						this.poppin();
 					} else {
 						anime.set(cells, { animationPlayState: 'paused' });
-						this.popout();
 					}
 				}
 			},
@@ -85,28 +74,6 @@
 			},
 			cells(doodle) {
 				return Array.from(doodle.shadowRoot.querySelector('.container').children);
-			},
-			poppin() {
-				const doodle = this.$refs['doodle'];
-
-				if (doodle) {
-					this.cells(doodle).forEach((c) => {
-						const duration =
-							parseFloat(
-								window.getComputedStyle(c).getPropertyValue('animation-duration')
-							) * 1000;
-
-						const interval = setInterval(() => {
-							this.pop.play();
-						}, duration);
-						
-						this.popTerval.push(interval);
-					});
-				}
-			},
-			popout() {
-				this.popTerval.forEach(i => clearInterval(i));
-				this.popTerval = [];
 			}
 		}
 	};
@@ -130,32 +97,32 @@
 
 		/* prettier-ignore */
 		--doodle: (
-			:doodle {
-				@grid: 20 / 100%; 
-				grid-gap: 10px;
-				
-			} 
-
-			position: relative;
-			z-index: 1;
-			background-color: #{$bg};
-			border-radius: 100%;
-			border: thin solid var(--color);
-			box-shadow: 0px 0px 0px 0px var(--color);
+				:doodle {
+					@grid: 20 / 100%; 
+					grid-gap: 10px;
 					
-			animation-name: pop;
-			animation-direction: alternate;
-			animation-iteration-count: infinite;
-			animation-fill-mode: both;
-			animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
-			animation-duration: @r(2s);
+				} 
 
-			@keyframes pop {
-				to {
-					box-shadow: @r(2px) @r(2px) 0px 0px var(--color);
+				position: relative;
+				z-index: 1;
+				background-color: #{$bg};
+				border-radius: 100%;
+				border: thin solid var(--color);
+				box-shadow: 0px 0px 0px 0px var(--color);
+						
+				animation-name: pop;
+				animation-direction: alternate;
+				animation-iteration-count: infinite;
+				animation-fill-mode: both;
+				animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+				animation-duration: @r(2s);
+
+				@keyframes pop {
+					to {
+						box-shadow: @r(2px) @r(2px) 0px 0px var(--color);
+					}
 				}
-			}
-		)
+			)
 		/* prettier-ignore */
 	}
 </style>

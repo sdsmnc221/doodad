@@ -20,6 +20,11 @@ export default new Router({
 			path: '/popping',
 			name: 'popping',
 			component: () => import('./views/Popping.vue')
+		},
+		{
+			path: '/loadinator',
+			name: 'loadinator',
+			component: () => import('./views/Loadinator.vue')
 		}
 	]
 });

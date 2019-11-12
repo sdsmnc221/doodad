@@ -1,10 +1,11 @@
 
 <template>
 	<div class="app">
-		<nav>
+		<nav ref="nav">
 			<router-link to="/">hi-</router-link>
 			<router-link to="/hello-world">hello world-</router-link>
 			<router-link to="/popping">popping-</router-link>
+			<router-link to="/loadinator">loadinator-</router-link>
 		</nav>
 		<main>
 			<router-view />
@@ -36,6 +37,8 @@
 						break;
 				}
 			});
+			
+			this.$refs['nav'].querySelectorAll('a').forEach(a => a.addEventListener('click', () => EventBus.$emit('nav')));
 		}
 	};
 </script>

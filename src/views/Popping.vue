@@ -11,6 +11,7 @@
 	import EventBus from '../classes/EventBus';
 	import utils from '../utils';
 
+	import Pop from '../assets/popping/pop.mp3';
 
 	const { tick } = utils;
 
@@ -19,11 +20,11 @@
 		data() {
 			return {
 				bounding: null,
-				play: true
+				play: true,
+				pop: new Audio(Pop)
 			};
 		},
-		computed: {
-		},
+		computed: {},
 		created() {
 			EventBus.$on('resize', this.resize.bind(this));
 			EventBus.$on('toggle', this.toggle.bind(this));
@@ -31,6 +32,7 @@
 		},
 		mounted() {
 			tick(this.size, 1000);
+			tick(this.popping, 1000);
 		},
 		methods: {
 			size() {
@@ -56,7 +58,8 @@
 				const doodle = this.$refs['doodle'];
 
 				if (doodle) {
-					const cells = doodle.shadowRoot.querySelector('.container').children;
+					const cells = this.cells(doodle);
+
 					if (this.play) {
 						anime.set(cells, { animationPlayState: 'running' });
 					} else {
@@ -68,8 +71,28 @@
 				const doodle = this.$refs['doodle'];
 
 				if (doodle) {
+					doodle.parentNode.style.setProperty('--color', utils.randomHexColorCode());
 					doodle.update();
 					this.toggle(true);
+				}
+			},
+			cells(doodle) {
+				return Array.from(doodle.shadowRoot.querySelector('.container').children);
+			},
+			popping() {
+				const doodle = this.$refs['doodle'];
+
+				if (doodle) {
+					this.cells(doodle).forEach((c) => {
+						const duration =
+							parseFloat(
+								window.getComputedStyle(c).getPropertyValue('animation-duration')
+							) * 1000;
+
+						setInterval(() => {
+							this.pop.play();
+						}, duration);
+					});
 				}
 			}
 		}
@@ -90,49 +113,36 @@
 			@include abs-center();
 		}
 
-		$color: rgb(random(255), random(255), random(255));
+		--color: black;
 
 		/* prettier-ignore */
 		--doodle: (
-					:doodle {
-						@grid: 20 / 100%; 
-						grid-gap: 10px;
-						
-					} 
+			:doodle {
+				@grid: 20 / 100%; 
+				grid-gap: 10px;
+				
+			} 
 
-					position: relative;
-					border-radius: 100%;
-					border: thin solid #{$color};
-					background-color: white;
-					overflow: visible;
+			position: relative;
+			z-index: 1;
+			background-color: #{$bg};
+			border-radius: 100%;
+			border: thin solid var(--color);
+			box-shadow: 0px 0px 0px 0px var(--color);
+					
+			animation-name: pop;
+			animation-direction: alternate;
+			animation-iteration-count: infinite;
+			animation-fill-mode: both;
+			animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+			animation-duration: @r(2s);
 
-					:after {
-						content: '';
-						display: block;
-						position: absolute;
-						z-index: -1;
-						top: 0;
-						left: 0;
-						width: 100%;
-						height: 100%;
-						background-color: #{$color};
-						border-radius: 100%;
-					}
-
-					animation-name: pop;
-					animation-direction: reverse;
-					animation-iteration-count: infinite;
-					animation-fill-mode: none;
-					animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
-					animation-duration: @rand(12s);
-					animation-delay: @rand(2s);
-
-					@keyframes pop {
-						to {
-							transform: translate(2px, 2px);
-						}
-					}
-				);
+			@keyframes pop {
+				to {
+					box-shadow: @r(2px) @r(2px) 0px 0px var(--color);
+				}
+			}
+		)
 		/* prettier-ignore */
 	}
 </style>

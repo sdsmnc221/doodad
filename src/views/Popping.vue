@@ -21,7 +21,8 @@
 			return {
 				bounding: null,
 				play: true,
-				pop: new Audio(Pop)
+				pop: new Audio(Pop),
+				popTerval: [],
 			};
 		},
 		computed: {},
@@ -31,8 +32,11 @@
 			EventBus.$on('refresh', this.refresh.bind(this));
 		},
 		mounted() {
-			tick(this.size, 1000);
-			tick(this.popping, 1000);
+			tick(() => {
+				this.size();
+				this.poppin();
+			}, 1000);
+			
 		},
 		methods: {
 			size() {
@@ -62,8 +66,10 @@
 
 					if (this.play) {
 						anime.set(cells, { animationPlayState: 'running' });
+						this.poppin();
 					} else {
 						anime.set(cells, { animationPlayState: 'paused' });
+						this.popout();
 					}
 				}
 			},
@@ -79,7 +85,7 @@
 			cells(doodle) {
 				return Array.from(doodle.shadowRoot.querySelector('.container').children);
 			},
-			popping() {
+			poppin() {
 				const doodle = this.$refs['doodle'];
 
 				if (doodle) {
@@ -89,11 +95,17 @@
 								window.getComputedStyle(c).getPropertyValue('animation-duration')
 							) * 1000;
 
-						setInterval(() => {
+						const interval = setInterval(() => {
 							this.pop.play();
 						}, duration);
+						
+						this.popTerval.push(interval);
 					});
 				}
+			},
+			popout() {
+				this.popTerval.forEach(i => clearInterval(i));
+				this.popTerval = [];
 			}
 		}
 	};

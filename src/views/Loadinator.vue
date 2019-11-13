@@ -28,7 +28,10 @@
 			EventBus.$on('refresh', this.refresh.bind(this));
 		},
 		mounted() {
-			tick(this.size, 1000);
+			tick(() => {
+				this.size();
+				this.refresh();
+			}, 1000);
 		},
 		methods: {
 			size() {
@@ -91,38 +94,72 @@
 
 		css-doodle {
 			@include abs-center();
+			--color: $text;
 		}
 
 		--color: black;
 
 		/* prettier-ignore */
 		--doodle: (
-				:doodle {
-					@grid: 20 / 100%; 
-					grid-gap: 10px;
-					
-				} 
+															:doodle {
+																@grid: 3 / 100%; 
+																grid-gap: 72px;
+																
+															} 
 
-				position: relative;
-				z-index: 1;
-				background-color: #{$bg};
-				border-radius: 100%;
-				border: thin solid var(--color);
-				box-shadow: 0px 0px 0px 0px var(--color);
-						
-				animation-name: pop;
-				animation-direction: alternate;
-				animation-iteration-count: infinite;
-				animation-fill-mode: both;
-				animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
-				animation-duration: @r(2s);
+															position: relative;
+															z-index: 1;
+															background-color: var(--color);
+															border-radius: 100%;
+															opacity: 1;
+															filter: blur(0) brightness(1);
+															
+															animation-name: fade;
+															animation-direction: alternate;
+															animation-iteration-count: infinite;
+															animation-fill-mode: both;
+															animation-timing-function: #{$ease-in-out-quart};
+															animation-duration: @r(0.4, 0.8)s;
+															
+															:after {
+																content: '';
+																display: block;
+																position: absolute;
+																z-index: -1;
+																width: 100%;
+																height: 100%;
+																top: 50%;
+																left: 50%;
+																transform: translate(-50%, -50%) scale(0);
+																background-color: var(--color);
+																border-radius: 100%;
+																opacity: 0;
+																filter: blur(0) brightness(1);
+																
+																// animation-name: fade-after;
+																// animation-direction: alternate;
+																// animation-iteration-count: infinite;
+																// animation-fill-mode: both;
+																// animation-timing-function: #{$ease-in-out-quart};
+																// animation-duration: @r(0.4, 0.8)s;
+															}
+															
+															@keyframes fade {
+																to {
+																	opacity: 0.4;
+																	// filter: blur(0.8px) brightness(0.8);
+																}
+															}
 
-				@keyframes pop {
-					to {
-						box-shadow: @r(2px) @r(2px) 0px 0px var(--color);
-					}
-				}
-			)
+															@keyframes fade-after {
+																to {
+																	transform: translate(-50%, -50%) scale(@r(1.2, 1.6));
+																	opacity: 0.4;
+																	filter: blur(1.2px) brightness(1.2);
+																}
+															}
+															
+														)
 		/* prettier-ignore */
 	}
 </style>

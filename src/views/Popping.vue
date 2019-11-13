@@ -30,46 +30,166 @@
 	const { tick } = utils;
 
 	const lyrics = [
-		`How long have you been smiling?`,
-		`It seems like it's been too long`,
-		`Some days I don't feel like trying`,
-		`So what the fuck are you on?`,
-		`Wooh oh.`,
-		`I think too much, we drink too much`,
-		`Falling in love like it's just nothing`,
-		`I want to know where do we go`,
-		`When nothing's wrong`,
-		`'Cause all the kids are depressed`,
-		`Nothing ever makes sense`,
-		`I'm not feeling alright`,
-		`Staying up 'til sunrise`,
-		`And hoping shit is okay`,
-		`Pretending we know things`,
-		`I don't know what happened`,
-		`My natural reaction is that we're scared`,
-		`So I guess we're scared`,
-		`No I can't really keep lying`,
-		`'Cause I've been scared all along`,
-		`I'm getting sick of sleeping in`,
-		`While all my friends are popping pills`,
-		`And I don't think that they're wrong`,
-		`I think too much, we drink too much`,
-		`Falling apart like it's just nothing`,
-		`And I want to know where do we go`,
-		`When nothing's wrong`,
-		`'Cause all the kids are depressed`,
-		`Nothing ever makes sense`,
-		`I'm not feeling alright`,
-		`Staying up 'til sunrise`,
-		`And hoping shit is okay`,
-		`Pretending we know things`,
-		`I don't know what happened`,
-		`My natural reaction is that we're scared`,
-		`So I guess we're scared`,
-		`I won't deny it 'cause you saw what it was`,
-		`I can't deny it if you won't give a fuck`,
-		`So I'll sew it up`,
-		`You know I am so in love`
+		{
+			line: `How long have you been smiling?`,
+			time: 0
+		},
+		{
+			line: `It seems like it's been too long.`,
+			time: 4
+		},
+		{
+			line: `Some days I don't feel like trying,`,
+			time: 9
+		},
+		{
+			line: `so what the fuck are you on?`,
+			time: 13
+		},
+		{
+			line: `I think too much, we drink too much.`,
+			time: 20
+		},
+		{
+			line: `Falling in love like it's just nothing.`,
+			time: 25
+		},
+		{
+			line: `I want to know where do we go,`,
+			time: 29
+		},
+		{
+			line: `when nothing's wrong.`,
+			time: 33
+		},
+		{
+			line: `'Cause all the kids are depressed,`,
+			time: 36
+		},
+		{
+			line: `nothing ever makes sense.`,
+			time: 38
+		},
+		{
+			line: `I'm not feeling alright,`,
+			time: 40
+		},
+		{
+			line: `staying up 'til sunrise`,
+			time: 43
+		},
+		{
+			line: `and hoping shit is okay,`,
+			time: 45
+		},
+		{
+			line: `pretending we know things`,
+			time: 48
+		},
+		{
+			line: `I don't know what happened.`,
+			time: 50
+		},
+		{
+			line: `My natural reaction is that we're scared.`,
+			time: 52
+		},
+		{
+			line: `So I guess we're scared.`,
+			time: 62
+		},
+		{
+			line: `But I can't really keep lying,`,
+			time: 73
+		},
+		{
+			line: `'cause I've been scared all along.`,
+			time: 79
+		},
+		{
+			line: `I'm getting sick of sleeping in`,
+			time: 83
+		},
+		{
+			line: `while all my friends are popping pills`,
+			time: 86
+		},
+		{
+			line: `and I don't think that they're wrong.`,
+			time: 88
+		},
+		{
+			line: `I think too much, we drink too much.`,
+			time: 94
+		},
+		{
+			line: `Falling apart like it's just nothing.`,
+			time: 99
+		},
+		{
+			line: `And I want to know where do we go`,
+			time: 103
+		},
+		{
+			line: `when nothing's wrong.`,
+			time: 107
+		},
+		{
+			line: `'Cause all the kids are depressed.`,
+			time: 110
+		},
+		{
+			line: `Nothing ever makes sense.`,
+			time: 112
+		},
+		{
+			line: `I'm not feeling alright,`,
+			time: 113
+		},
+		{
+			line: `staying up 'til sunrise`,
+			time: 117
+		},
+		{
+			line: `and hoping shit is okay,`,
+			time: 120
+		},
+		{
+			line: `pretending we know things`,
+			time: 122
+		},
+		{
+			line: `I don't know what happened.`,
+			time: 125
+		},
+		{
+			line: `My natural reaction is that we're scared.`,
+			time: 127
+		},
+		{
+			line: `So I guess we're scared.`,
+			time: 138
+		},
+		{
+			line: `I won't deny it 'cause you saw what it was.`,
+			time: 149
+		},
+		{
+			line: `I can't deny it if you won't give a fuck.`,
+			time: 154
+		},
+		{
+			line: `So I'll start it out.`,
+			time: 159
+		},
+		{
+			line: `You know I am so in love.`,
+			time: 162
+		},
+		{
+			line: `.`,
+			time: 166
+		}
 	];
 
 	export default {
@@ -97,12 +217,12 @@
 			EventBus.$on('nav', this.popout);
 		},
 		mounted() {
+			tick(this.size, 1000);
 			tick(() => {
-				this.size();
 				this.refresh();
 				this.poppin();
 				this.lyrics();
-			}, 1000);
+			}, 2000);
 		},
 		methods: {
 			size() {
@@ -180,8 +300,8 @@
 				this.popTerval = [];
 			},
 			lyrics() {
-				lyrics.forEach((line, i) => {
-					setTimeout(() => this.popups.push(line), i * 4000);
+				lyrics.forEach((l, i) => {
+					setTimeout(() => this.popups.push(l.line), 1000 * l.time);
 				});
 			},
 			isLast(index) {
@@ -215,7 +335,7 @@
 		/* prettier-ignore */
 		--doodle: (
 			:doodle {
-				@grid: 16 / 100%; 
+				@grid: 20 / 100%; 
 				grid-gap: 10px;
 			} 
 

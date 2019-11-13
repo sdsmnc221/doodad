@@ -69,15 +69,6 @@
 			filter: blur(0);
 		}
 
-		&:after {
-			content: '';
-			display: block;
-			@include size(100%, 100%);
-			@include abs-pos(0, 0);
-			background-color: var(--color);
-			opacity: 0.4;
-		}
-
 		img {
 			display: block;
 			@include abs-pos(-1rem, 0.2rem);

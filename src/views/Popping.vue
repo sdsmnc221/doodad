@@ -1,6 +1,13 @@
 <template>
 	<div class="wrapper" @resize="resize">
 		<css-doodle ref="doodle" use="var(--doodle)"></css-doodle>
+		<PopUp
+			v-for="(line, index) in popups"
+			:key="index"
+			:text="line"
+			:icon="icon"
+			:active="isLast(index)"
+		/>
 	</div>
 </template>
 
@@ -11,21 +18,78 @@
 	import EventBus from '../classes/EventBus';
 	import utils from '../utils';
 
+	import PopUp from '../components/Popup';
+
+	import HeartIcon from '../assets/popping/heart.svg';
+	import Depressed from '../assets/popping/depressed.mp3';
 	import Pop from '../assets/popping/pop.mp3';
+	import Plop from '../assets/popping/plop.mp3';
+	import Snap from '../assets/popping/neck-snap.mp3';
+	import Click from '../assets/popping/click.mp3';
 
 	const { tick } = utils;
 
+	const lyrics = [
+		`How long have you been smiling?`,
+		`It seems like it's been too long`,
+		`Some days I don't feel like trying`,
+		`So what the fuck are you on?`,
+		`Wooh oh.`,
+		`I think too much, we drink too much`,
+		`Falling in love like it's just nothing`,
+		`I want to know where do we go`,
+		`When nothing's wrong`,
+		`'Cause all the kids are depressed`,
+		`Nothing ever makes sense`,
+		`I'm not feeling alright`,
+		`Staying up 'til sunrise`,
+		`And hoping shit is okay`,
+		`Pretending we know things`,
+		`I don't know what happened`,
+		`My natural reaction is that we're scared`,
+		`So I guess we're scared`,
+		`No I can't really keep lying`,
+		`'Cause I've been scared all along`,
+		`I'm getting sick of sleeping in`,
+		`While all my friends are popping pills`,
+		`And I don't think that they're wrong`,
+		`I think too much, we drink too much`,
+		`Falling apart like it's just nothing`,
+		`And I want to know where do we go`,
+		`When nothing's wrong`,
+		`'Cause all the kids are depressed`,
+		`Nothing ever makes sense`,
+		`I'm not feeling alright`,
+		`Staying up 'til sunrise`,
+		`And hoping shit is okay`,
+		`Pretending we know things`,
+		`I don't know what happened`,
+		`My natural reaction is that we're scared`,
+		`So I guess we're scared`,
+		`I won't deny it 'cause you saw what it was`,
+		`I can't deny it if you won't give a fuck`,
+		`So I'll sew it up`,
+		`You know I am so in love`
+	];
+
 	export default {
 		name: 'Popping',
+		components: { PopUp },
 		data() {
 			return {
 				bounding: null,
 				play: true,
-				pop: new Audio(Pop),
+				song: new Audio(Depressed),
+				pops: [Pop, Plop, Snap, Click].map((p) => new Audio(p)),
 				popTerval: [],
+				popups: []
 			};
 		},
-		computed: {},
+		computed: {
+			icon() {
+				return HeartIcon;
+			}
+		},
 		created() {
 			EventBus.$on('resize', this.resize.bind(this));
 			EventBus.$on('toggle', this.toggle.bind(this));
@@ -35,9 +99,10 @@
 		mounted() {
 			tick(() => {
 				this.size();
+				this.refresh();
 				this.poppin();
+				this.lyrics();
 			}, 1000);
-			
 		},
 		methods: {
 			size() {
@@ -67,7 +132,7 @@
 
 					if (this.play) {
 						anime.set(cells, { animationPlayState: 'running' });
-						this.poppin();
+						// this.poppin();
 					} else {
 						anime.set(cells, { animationPlayState: 'paused' });
 						this.popout();
@@ -90,23 +155,37 @@
 				const doodle = this.$refs['doodle'];
 
 				if (doodle) {
-					this.cells(doodle).forEach((c) => {
+					this.song.volume = 1;
+					this.song.play();
+
+					this.cells(doodle).forEach((c, i) => {
 						const duration =
 							parseFloat(
 								window.getComputedStyle(c).getPropertyValue('animation-duration')
 							) * 1000;
 
 						const interval = setInterval(() => {
-							this.pop.play();
+							const pop = utils.sample(this.pops);
+							pop.volume = Math.random() * (i % 2 === 0 ? 0.64 : 0.32);
+							pop.play();
 						}, duration);
-						
+
 						this.popTerval.push(interval);
 					});
 				}
 			},
 			popout() {
-				this.popTerval.forEach(i => clearInterval(i));
+				this.song.pause();
+				this.popTerval.forEach((i) => clearInterval(i));
 				this.popTerval = [];
+			},
+			lyrics() {
+				lyrics.forEach((line, i) => {
+					setTimeout(() => this.popups.push(line), i * 4000);
+				});
+			},
+			isLast(index) {
+				return index === this.popups.length - 1;
 			}
 		}
 	};
@@ -124,6 +203,11 @@
 
 		css-doodle {
 			@include abs-center();
+			overflow: visible;
+
+			* {
+				overflow: visible;
+			}
 		}
 
 		--color: black;
@@ -131,13 +215,13 @@
 		/* prettier-ignore */
 		--doodle: (
 			:doodle {
-				@grid: 20 / 100%; 
+				@grid: 16 / 100%; 
 				grid-gap: 10px;
-				
 			} 
 
 			position: relative;
 			z-index: 1;
+			overflow: visible;
 			background-color: #{$bg};
 			border-radius: 100%;
 			border: thin solid var(--color);
@@ -152,7 +236,8 @@
 
 			@keyframes pop {
 				to {
-					box-shadow: @r(2px) @r(2px) 0px 0px var(--color);
+					box-shadow: @r(4px) @r(4px) 0px 0px var(--color);
+					transform: scale(@r(0.8, 1.2));
 				}
 			}
 		)

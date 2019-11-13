@@ -17,6 +17,11 @@ export default new Router({
 			component: () => import('./views/HelloWorld.vue')
 		},
 		{
+			path: '/hello-popping',
+			name: 'hello-popping',
+			component: () => import('./views/HelloPopping.vue')
+		},
+		{
 			path: '/popping',
 			name: 'popping',
 			component: () => import('./views/Popping.vue')

@@ -1,6 +1,9 @@
 <template>
 	<div class="wrapper" ref="wrapper" @resize="resize">
 		<css-doodle use="var(--doodle)"></css-doodle>
+		<css-doodle use="var(--doodle)"></css-doodle>
+		<css-doodle use="var(--doodle)"></css-doodle>
+		<css-doodle use="var(--doodle)"></css-doodle>
 	</div>
 </template>
 
@@ -18,7 +21,8 @@
 		data() {
 			return {
 				bounding: null,
-				play: true
+				play: true,
+				doodles: [...Array(4).map((d, i) => `var(--doodle=${i})`)]
 			};
 		},
 		computed: {},
@@ -31,6 +35,7 @@
 			tick(() => {
 				this.size();
 				// this.refresh();
+				console.log(this.doodles)
 			}, 1000);
 		},
 		methods: {
@@ -88,25 +93,20 @@
 	.wrapper {
 		@include abs-center();
 		padding: 64px;
-		display: grid;
-		grid-template-columns: repeat(5, 1fr);
-		grid-template-rows: repeat(5, 1fr);
-		justify-items: stretch;
-		align-items: stretch;
+		display: flex;
+		flex-wrap: wrap;
+		--color: black;
 
 		css-doodle {
-			grid-area: 1 / 1 / span 1 / span 1;
-			--color: $text;
-			background-color: black;
+			@include size(20%, 20%);
+			margin: 0 2.5%;
 		}
-
-		--color: black;
 
 		/* prettier-ignore */
 		--doodle: (
 			:doodle {
-				@grid: 3 / 20px; 
-				grid-gap: 72px;
+				@grid: 3 / 100%;
+				grid-gap: 24px;
 				
 			} 
 
